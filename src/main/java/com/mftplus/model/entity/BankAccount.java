@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @Getter
 @Setter
-public class BankAccount {
+public class BankAccount extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -30,10 +30,13 @@ public class BankAccount {
     @Column(name="name", length = 20, nullable = false)
     private String family;
 
+    @Column(nullable = false, unique = true, length = 16)
     private String accountNumber;
 
+    @Column(nullable = false, precision = 19, scale = 2)
     private BigDecimal balance;
 
+    @Column(nullable = false)
     private AccountType type;
 
 
