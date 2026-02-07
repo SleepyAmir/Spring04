@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Person Management</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap-icons.css}">
+    <link rel="icon" th:href="@{/icon/person.png}">
+</head>
+<body class="bg-light">
+
+<div class="container py-5">
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="successToast" class="toast align-items-center text-bg-success border-0" role="alert"
+             th:if="${successMessage}">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    <span th:text="${successMessage}"></span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+
+        <div id="errorToast" class="toast align-items-center text-bg-danger border-0" role="alert"
+             th:if="${errorMessage}">
+            <div class="d-flex">
+                <div class="toast-body">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <span th:text="${errorMessage}"></span>
+                </div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="card shadow-sm border-0">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+            <h5 class="mb-0 text-primary fw-bold">Person Management</h5>
+            <button type="button" class="btn btn-primary" onclick="openAddModal()">
+                <i class="bi bi-plus-lg"></i> Add Person
+            </button>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">ID</th>
+                        <th>Name</th>
+                        <th>Family</th>
+                        <th class="text-end pe-4">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${persons.content.empty}">
+                        <td colspan="4" class="text-center py-4 text-muted">No data available</td>
+                    </tr>
+                    <tr th:each="p : ${persons.content}">
+                        <td class="ps-4" th:text="${p.id}"></td>
+                        <td th:text="${p.name}"></td>
+                        <td th:text="${p.family}"></td>
+                        <td class="text-end pe-4">
+                            <button class="btn btn-sm btn-outline-warning me-1"
+                                    th:onclick="openEditModal([[${p.id}]], [[${p.name}]], [[${p.family}]])">
+                                <i class="bi bi-pencil"></i>
+                            </button>
+                            <button class="btn btn-sm btn-outline-danger"
+                                    data-bs-toggle="modal" data-bs-target="#deleteModal"
+                                    th:data-id="${p.id}">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="card-footer bg-white py-3" th:if="${persons.totalPages > 1}">
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mb-0">
+                    <li class="page-item" th:classappend="${persons.first} ? 'disabled'">
+                        <a class="page-link" th:href="@{/persons(page=${persons.number - 1}, size=${persons.size})}">Previous</a>
+                    </li>
+                    <li class="page-item" th:each="i : ${#numbers.sequence(0, persons.totalPages - 1)}"
+                        th:classappend="${i == persons.number} ? 'active'">
+                        <a class="page-link" th:href="@{/persons(page=${i}, size=${persons.size})}"
+                           th:text="${i + 1}">1</a>
+                    </li>
+                    <li class="page-item" th:classappend="${persons.last} ? 'disabled'">
+                        <a class="page-link" th:href="@{/persons(page=${persons.number + 1}, size=${persons.size})}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="personModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Person Form</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <form id="personForm" method="post" th:object="${person}"
+                      th:action="${formAction != null ? formAction : '/persons'}">
+
+                    <input type="hidden" name="_method" id="methodField"
+                           th:value="${person.id != null ? 'put' : ''}"
+                           th:disabled="${person.id == null}">
+
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-control" th:field="*{name}"
+                               th:classappend="${#fields.hasErrors('name')} ? 'is-invalid' : ''">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Family</label>
+                        <input type="text" class="form-control" th:field="*{family}"
+                               th:classappend="${#fields.hasErrors('family')} ? 'is-invalid' : ''">
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('family')}"
+                             th:errors="*{family}"></div>
+                    </div>
+
+                    <div class="text-end">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog modal-sm modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-4">
+                <h5 class="mb-3">Are you sure?</h5>
+                <form id="deleteForm" method="post">
+                    <input type="hidden" name="_method" value="delete">
+                    <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script th:src="@{/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/js/script.js}"></script>
+
+</body>
+</html>
