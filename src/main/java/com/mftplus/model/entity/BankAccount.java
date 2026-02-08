@@ -4,14 +4,17 @@ import com.mftplus.model.enums.AccountType;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 
 import java.math.BigDecimal;
 
 
 @Entity(name="BankAccountEntity")
-@Table(name="BankAccount")
-
+@Table(name="bankAccount")
+@SQLDelete(sql = "UPDATE bankAccount SET deleted = true WHERE id = ?")
+@SQLRestriction("deleted = false")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
