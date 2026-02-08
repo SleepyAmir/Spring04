@@ -42,6 +42,7 @@ public class BankAccount extends BaseEntity {
     @Column(nullable = false)
     private AccountType type;
 
-
+    @Column(name = "deleted", nullable = false)
+    private boolean deleted = false;
 
 }
