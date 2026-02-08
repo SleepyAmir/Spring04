@@ -26,6 +26,7 @@ public interface BankAccountService {
 
     Page<BankAccountDto>findByAccountNumber(String accountNumber,Pageable pageable);
 
+    Page<BankAccountDto>findByNameAndAccountNumber(String name,String accountNumber,Pageable pageable);
 
 
 }

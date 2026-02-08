@@ -99,4 +99,11 @@ public class BankAccountServiceImpl implements BankAccountService {
         return bankAccountRepository.findByAccountNumber(accountNumber,pageable)
                 .map(bankAccountMapper::toDto);
     }
+
+    @Override
+    public Page<BankAccountDto> findByNameAndAccountNumber(String name, String accountNumber, Pageable pageable) {
+        return bankAccountRepository.findByNameAndAccountNumber(accountNumber,pageable)
+                .map(bankAccountMapper::toDto);
+    }
+
 }

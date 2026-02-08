@@ -41,4 +41,6 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, Long> 
 
     Page<BankAccount> findByAccountNumber(String accountNumber ,Pageable pageable);
 
+    Page<BankAccount> findByNameAndAccountNumber(String name, String accountNumber, Pageable pageable);
+
 }
