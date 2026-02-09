@@ -1,6 +1,5 @@
 package com.mftplus.controller;
 
-
 import com.mftplus.dto.BankAccountDto;
 import com.mftplus.exception.ResourceNotFoundException;
 import com.mftplus.model.enums.AccountType;
@@ -26,77 +25,77 @@ public class BankAccountController {
 
     private final BankAccountService bankAccountService;
 
-
-    private void preparedListModel(Model model, int page , int size,String name ,String family , String accountNumber , BigDecimal balance, AccountType type) {
-        Pageable pageable= PageRequest.of(page,size, Sort.by("balance").descending());
+    // Helper method to prepare list model - با حذف پارامترهای غیرضروری
+    private void prepareListModel(Model model, int page, int size, String name, String accountNumber) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("balance").descending());
         Page<BankAccountDto> bankAccountPage;
 
-        if (name != null && accountNumber != null) {
-            bankAccountPage=bankAccountService.findByNameAndAccountNumber(name,accountNumber,pageable);
-        }else{
-            bankAccountPage=bankAccountService.findAll(pageable);
+        if (name != null && accountNumber != null && !name.isBlank()) {
+            bankAccountPage = bankAccountService.findByNameAndAccountNumber(name, accountNumber, pageable);
+        } else {
+            bankAccountPage = bankAccountService.findAll(pageable);
         }
-        model.addAttribute("bankAccountPage",bankAccountPage);
+
+        model.addAttribute("bankAccounts", bankAccountPage);
     }
 
+    // --- GET LIST ---
     @GetMapping
     public String getAllBankAccounts(
-            @RequestParam(defaultValue = "0")int page,
-            @RequestParam(defaultValue = "10")int size,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String accountNumber,
-            @RequestParam(required = false) String family,
-            @RequestParam(required = false) BigDecimal balance,
-            @RequestParam(required = false) AccountType type,
-            Model model){
+            Model model) {
 
-        preparedListModel(model,page,size,name,family,accountNumber,balance,type);
+        prepareListModel(model, page, size, name, accountNumber);
 
-        if (!model.containsAttribute("bankAccountPage")){
-            model.addAttribute("bankAccountPage",new BankAccountDto());
+        // ساخت یک DTO خالی برای فرم
+        if (!model.containsAttribute("bankAccount")) {
+            model.addAttribute("bankAccount", new BankAccountDto());
         }
-        return "bankAccount/list";
 
+        return "bankAccount/list";
     }
 
-    @PostMapping("/trash")
+    // --- GET TRASH ---
+    @GetMapping("/trash")  // تغییر از PostMapping به GetMapping
     public String getTrash(
-            @RequestParam(defaultValue = "0")int page,
-            @RequestParam(defaultValue = "10")int size,
-            Model model
-    ){
-        Pageable  pageable = PageRequest.of(page,size, Sort.by("balance").descending());
-        Page<BankAccountDto> deletedPage =  bankAccountService.findAllDeleted(pageable);
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            Model model) {
 
-        model.addAttribute("bankAccounts",deletedPage);
-        model.addAttribute("isTrash",true);
+        Pageable pageable = PageRequest.of(page, size, Sort.by("balance").descending());
+        Page<BankAccountDto> deletedPage = bankAccountService.findAllDeleted(pageable);
+
+        model.addAttribute("bankAccounts", deletedPage);
+        model.addAttribute("isTrash", true);
         return "bankAccount/list";
     }
 
-
+    // --- CREATE (POST) ---
     @PostMapping
     public String createBankAccount(
             @Valid @ModelAttribute("bankAccount") BankAccountDto bankAccountDto,
             BindingResult result,
             Model model,
             RedirectAttributes redirectAttributes,
-            @RequestParam(defaultValue = "0")int page,
-            @RequestParam(defaultValue = "10")int size
-    ){
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
 
-        if (result.hasErrors()){
-            preparedListModel(model,page,size,null,null,null,null,null);
-            model.addAttribute("showModel",true);
-            model.addAttribute("formAction","bankAccount");
-            return   "bankAccount/list";
+        if (result.hasErrors()) {
+            prepareListModel(model, page, size, null, null);
+            model.addAttribute("showModal", true);
+            model.addAttribute("formAction", "/bank");
+            return "bankAccount/list";
         }
+
         bankAccountService.save(bankAccountDto);
-        redirectAttributes.addFlashAttribute("successMessage","Account Created successfully");
-        return "redirect:/bankAccount";
-
-
+        redirectAttributes.addFlashAttribute("successMessage", "Account created successfully!");
+        return "redirect:/bank";
     }
 
+    // --- UPDATE (PUT) ---
     @PutMapping("/{id}")
     public String updateBankAccount(
             @PathVariable Long id,
@@ -104,34 +103,43 @@ public class BankAccountController {
             BindingResult result,
             Model model,
             RedirectAttributes redirectAttributes,
-            @RequestParam(defaultValue = "0")int page
-    ){
-        if (result.hasErrors()){
-            preparedListModel(model,page,10,null,null,null,null,null);
-            model.addAttribute("showModel",true);
-            model.addAttribute("formAction","/bankAccount"+id);
+            @RequestParam(defaultValue = "0") int page) {
+
+        if (result.hasErrors()) {
+            prepareListModel(model, page, 10, null, null);
+            model.addAttribute("showModal", true);
+            model.addAttribute("formAction", "/bank/" + id);
             bankAccountDto.setId(id);
-            return"bankAccount/list";
+            return "bankAccount/list";
         }
 
-        if (bankAccountService.findById(id)==null){
-            throw new ResourceNotFoundException("Bank Account not found");
+        if (bankAccountService.findById(id) == null) {
+            throw new ResourceNotFoundException("Bank Account not found with id: " + id);
         }
 
         bankAccountDto.setId(id);
         bankAccountService.update(bankAccountDto);
-        redirectAttributes.addFlashAttribute("successMessage","Account Updated successfully");
-        return "redirect:/bankAccount";
+        redirectAttributes.addFlashAttribute("successMessage", "Account updated successfully!");
+        return "redirect:/bank";
     }
 
+    // --- DELETE ---
+    @DeleteMapping("/{id}")
+    public String deleteBankAccount(@PathVariable Long id, RedirectAttributes redirectAttributes) {
+        if (bankAccountService.findById(id) == null) {
+            throw new ResourceNotFoundException("Cannot delete. Bank Account not found with id: " + id);
+        }
 
+        bankAccountService.deleteById(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Account deleted (moved to trash).");
+        return "redirect:/bank";
+    }
 
+    // --- RESTORE ---
     @PostMapping("/restore/{id}")
-    public String restoreBankAccount(@PathVariable Long id, RedirectAttributes redirectAttributes){
+    public String restoreBankAccount(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         bankAccountService.restoreById(id);
-        redirectAttributes.addFlashAttribute("successMessage","Account Restored successfully");
-        return "redirect:/bankAccount/trash";
+        redirectAttributes.addFlashAttribute("successMessage", "Account restored successfully!");
+        return "redirect:/bank/trash";
     }
-
 }
-

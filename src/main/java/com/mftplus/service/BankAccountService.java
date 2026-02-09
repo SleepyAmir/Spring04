@@ -1,6 +1,7 @@
 package com.mftplus.service;
 
 import com.mftplus.dto.BankAccountDto;
+import com.mftplus.model.enums.AccountType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -28,5 +29,6 @@ public interface BankAccountService {
 
     Page<BankAccountDto>findByNameAndAccountNumber(String name,String accountNumber,Pageable pageable);
 
+    BankAccountDto issueAccount(Long id, AccountType accountType, BankAccountDto bankAccountDto);
 
 }

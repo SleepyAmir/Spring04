@@ -3,6 +3,7 @@ package com.mftplus.service;
 import com.mftplus.dto.BankAccountDto;
 import com.mftplus.mapper.BankAccountMapper;
 import com.mftplus.model.entity.BankAccount;
+import com.mftplus.model.enums.AccountType;
 import com.mftplus.repository.BankAccountRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,12 +22,20 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     private final BankAccountRepository bankAccountRepository;
     private final BankAccountMapper bankAccountMapper;
+    private final SecureRandom random = new SecureRandom();
+    private static final String Account_BIN = "6037";
+    private static final BigDecimal Default_Balance = new BigDecimal("1000.00");
+
 
 
 
     @Transactional
     @Override
     public void save(BankAccountDto bankAccountDto) {
+
+        bankAccountDto.setAccountNumber(generateAccountNumber());
+        bankAccountDto.setBalance(Default_Balance);
+
         BankAccount bankAccount = bankAccountMapper.toEntity(bankAccountDto);
         bankAccountRepository.save(bankAccount);
     }
@@ -35,6 +46,11 @@ public class BankAccountServiceImpl implements BankAccountService {
         if (bankAccountDto.getId() == null){
             throw new IllegalArgumentException("ID cannot be null for update");
         }
+        BankAccount existingAccount = bankAccountRepository.findById(bankAccountDto.getId()).orElseThrow(()->new IllegalArgumentException("Account not found"));
+        existingAccount.setName(bankAccountDto.getName());
+        existingAccount.setFamily(bankAccountDto.getFamily());
+        existingAccount.setType(bankAccountDto.getType());
+
         BankAccount bankAccount = bankAccountMapper.toEntity(bankAccountDto);
         bankAccountRepository.save(bankAccount);
 
@@ -104,6 +120,35 @@ public class BankAccountServiceImpl implements BankAccountService {
     public Page<BankAccountDto> findByNameAndAccountNumber(String name, String accountNumber, Pageable pageable) {
         return bankAccountRepository.findByNameAndAccountNumber(name,accountNumber,pageable)
                 .map(bankAccountMapper::toDto);
+    }
+
+    @Override
+    public BankAccountDto issueAccount(Long id, AccountType accountType, BankAccountDto bankAccountDto) {
+
+
+        return null;
+    }
+
+
+    private String generateAccountNumber() {
+        StringBuilder sb = new StringBuilder(Account_BIN); // 6037
+
+        for (int i = 0; i < 12; i++) {
+            sb.append(random.nextInt(10));
+        }
+
+        return sb.toString();
+    }
+
+
+    private String generatedUniqueAccountNumber() {
+        String accountNumber ;
+        do{
+            accountNumber = generateAccountNumber();
+        }while (bankAccountRepository.findByAccountNumber(accountNumber,null).hasContent());
+
+        return accountNumber;
+
     }
 
 }

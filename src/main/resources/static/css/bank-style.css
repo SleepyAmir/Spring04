@@ -1,0 +1,266 @@
+/* Bank Account Management Custom Styles */
+
+/* Main Card Styling */
+.main-card {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.main-card .card-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.main-card .card-header h5 {
+    font-weight: 700;
+}
+
+.main-card .card-header .btn-outline-secondary {
+    color: white;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.main-card .card-header .btn-outline-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: white;
+    color: white;
+}
+
+.main-card .card-header .btn-primary {
+    background-color: white;
+    color: #667eea;
+    border-color: white;
+    font-weight: 600;
+}
+
+.main-card .card-header .btn-primary:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+    color: #764ba2;
+}
+
+/* Table Styling */
+.table thead th {
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.875rem;
+    letter-spacing: 0.5px;
+    color: #4a5568;
+}
+
+.table tbody tr {
+    transition: all 0.3s ease;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+    transform: translateX(5px);
+}
+
+/* Account Number Styling */
+.account-number {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 600;
+    color: #2d3748;
+    background-color: #f7fafc;
+    padding: 6px 12px;
+    border-radius: 6px;
+    letter-spacing: 2px;
+    font-size: 0.95rem;
+    display: inline-block;
+}
+
+/* Balance Amount Styling */
+.balance-amount {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #38a169;
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Badge Styling */
+.badge.bg-success {
+    background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%) !important;
+    padding: 6px 12px;
+    font-weight: 600;
+}
+
+.badge.bg-info {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%) !important;
+    padding: 6px 12px;
+    font-weight: 600;
+}
+
+.badge.bg-danger {
+    background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%) !important;
+    padding: 6px 12px;
+    font-weight: 600;
+}
+
+.badge.bg-secondary {
+    background: linear-gradient(135deg, #868f96 0%, #596164 100%) !important;
+    padding: 6px 12px;
+    font-weight: 600;
+}
+
+/* Button Hover Effects */
+.btn-outline-warning {
+    transition: all 0.3s ease;
+}
+
+.btn-outline-warning:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+}
+
+.btn-outline-danger {
+    transition: all 0.3s ease;
+}
+
+.btn-outline-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-outline-success {
+    transition: all 0.3s ease;
+}
+
+.btn-outline-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(25, 135, 84, 0.3);
+}
+
+/* Modal Styling */
+.modal-content {
+    border-radius: 15px;
+    border: none;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 15px 15px 0 0;
+    border-bottom: none;
+}
+
+.modal-header .btn-close {
+    filter: brightness(0) invert(1);
+}
+
+/* Form Input Styling */
+.form-control:focus,
+.form-select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    color: #4a5568;
+}
+
+.form-label i {
+    color: #667eea;
+}
+
+/* Alert Info Box */
+.alert-info {
+    background: linear-gradient(135deg, #e0f7fa 0%, #b2ebf2 100%);
+    border: 1px solid #4dd0e1;
+    border-radius: 10px;
+}
+
+.alert-info i {
+    color: #0097a7;
+}
+
+/* Empty State */
+.table tbody td i.bi-inbox {
+    opacity: 0.3;
+}
+
+/* Pagination */
+.pagination .page-link {
+    color: #667eea;
+    border-radius: 5px;
+    margin: 0 3px;
+    transition: all 0.3s ease;
+}
+
+.pagination .page-link:hover {
+    background-color: #667eea;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #667eea;
+    border-color: #667eea;
+}
+
+/* Toast Styling */
+.toast {
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .main-card .card-header {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .main-card .card-header h5 {
+        font-size: 1.1rem;
+    }
+    
+    .table {
+        font-size: 0.875rem;
+    }
+    
+    .account-number {
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        padding: 4px 8px;
+    }
+    
+    .balance-amount {
+        font-size: 0.95rem;
+    }
+}
+
+/* Animation */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Highlight new account number */
+@keyframes highlight {
+    0% {
+        background-color: #fef3c7;
+    }
+    100% {
+        background-color: #f7fafc;
+    }
+}
+
+.account-number.new {
+    animation: highlight 2s ease-in-out;
+}

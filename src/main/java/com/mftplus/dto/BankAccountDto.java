@@ -22,7 +22,6 @@ public class BankAccountDto {
     @Pattern(regexp = "^[a-zA-Z\\s]{3,20}$", message = "Invalid Name")
     private String family;
 
-    @Column(nullable = false, unique = true, length = 16)
     private String accountNumber;
 
     @NotBlank
