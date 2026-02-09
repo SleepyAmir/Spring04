@@ -19,7 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import java.math.BigDecimal;
 
 @Controller
-@RequestMapping("/bank")
+@RequestMapping("/bankAccount")
 @RequiredArgsConstructor
 public class BankAccountController {
 
@@ -70,6 +70,11 @@ public class BankAccountController {
 
         model.addAttribute("bankAccounts", deletedPage);
         model.addAttribute("isTrash", true);
+
+        if (!model.containsAttribute("bankAccount")) {
+            model.addAttribute("bankAccount", new BankAccountDto());
+        }
+
         return "bankAccount/list";
     }
 
@@ -86,13 +91,13 @@ public class BankAccountController {
         if (result.hasErrors()) {
             prepareListModel(model, page, size, null, null);
             model.addAttribute("showModal", true);
-            model.addAttribute("formAction", "/bank");
+            model.addAttribute("formAction", "/bankAccount");
             return "bankAccount/list";
         }
 
         bankAccountService.save(bankAccountDto);
         redirectAttributes.addFlashAttribute("successMessage", "Account created successfully!");
-        return "redirect:/bank";
+        return "redirect:/bankAccount";
     }
 
     // --- UPDATE (PUT) ---
@@ -108,7 +113,7 @@ public class BankAccountController {
         if (result.hasErrors()) {
             prepareListModel(model, page, 10, null, null);
             model.addAttribute("showModal", true);
-            model.addAttribute("formAction", "/bank/" + id);
+            model.addAttribute("formAction", "/bankAccount/" + id);
             bankAccountDto.setId(id);
             return "bankAccount/list";
         }
@@ -120,7 +125,7 @@ public class BankAccountController {
         bankAccountDto.setId(id);
         bankAccountService.update(bankAccountDto);
         redirectAttributes.addFlashAttribute("successMessage", "Account updated successfully!");
-        return "redirect:/bank";
+        return "redirect:/bankAccount";
     }
 
     // --- DELETE ---
@@ -132,7 +137,7 @@ public class BankAccountController {
 
         bankAccountService.deleteById(id);
         redirectAttributes.addFlashAttribute("successMessage", "Account deleted (moved to trash).");
-        return "redirect:/bank";
+        return "redirect:/bankAccount";
     }
 
     // --- RESTORE ---
@@ -140,6 +145,6 @@ public class BankAccountController {
     public String restoreBankAccount(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         bankAccountService.restoreById(id);
         redirectAttributes.addFlashAttribute("successMessage", "Account restored successfully!");
-        return "redirect:/bank/trash";
+        return "redirect:/bankAccount/trash";
     }
 }
