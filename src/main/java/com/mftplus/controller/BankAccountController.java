@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/bankAccount")  // ✅ مسیر اصلی
+@RequestMapping("/bankAccount")
 @RequiredArgsConstructor
 public class BankAccountController {
 
@@ -36,7 +36,6 @@ public class BankAccountController {
         model.addAttribute("bankAccounts", bankAccountPage);
     }
 
-    // --- GET LIST --- ✅ این متد اضافه شده
     @GetMapping
     public String getAllBankAccounts(
             @RequestParam(defaultValue = "0") int page,

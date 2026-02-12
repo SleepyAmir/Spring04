@@ -47,11 +47,9 @@
                 </span>
             </h5>
             <div class="btn-group" role="group">
-                <!-- ✅ تغییر یافته -->
                 <a th:href="@{/bankAccount/trash}" class="btn btn-outline-secondary btn-sm" th:unless="${isTrash}">
                     <i class="bi bi-trash"></i> Trash
                 </a>
-                <!-- ✅ تغییر یافته -->
                 <a th:href="@{/bankAccount}" class="btn btn-outline-secondary btn-sm" th:if="${isTrash}">
                     <i class="bi bi-arrow-left"></i> Back
                 </a>
@@ -136,25 +134,23 @@
             </div>
         </div>
 
-        <!-- Pagination -->
+        <!-- Pagination - 🔧 FIXED -->
         <div class="card-footer bg-white py-3" th:if="${bankAccounts.totalPages > 1}">
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center mb-0">
                     <li class="page-item" th:classappend="${bankAccounts.first} ? 'disabled'">
-                        <!-- ✅ تغییر یافته -->
-                        <a class="page-link" th:href="@{/bankAccount(page=${bankAccounts.number - 1}, size=${bankAccounts.size})}">Previous</a>
+                        <a class="page-link"
+                           th:href="${isTrash} ? @{/bankAccount/trash(page=${bankAccounts.number - 1}, size=${bankAccounts.size})} : @{/bankAccount(page=${bankAccounts.number - 1}, size=${bankAccounts.size})}">Previous</a>
                     </li>
                     <li class="page-item" th:each="i : ${#numbers.sequence(0, bankAccounts.totalPages - 1)}"
                         th:classappend="${i == bankAccounts.number} ? 'active'">
-                        <!-- ✅ تغییر یافته -->
-                        <a class="page-link" th:href="@{/bankAccount(page=${i}, size=${bankAccounts.size})}"
+                        <a class="page-link"
+                           th:href="${isTrash} ? @{/bankAccount/trash(page=${i}, size=${bankAccounts.size})} : @{/bankAccount(page=${i}, size=${bankAccounts.size})}"
                            th:text="${i + 1}">1</a>
                     </li>
                     <li class="page-item" th:classappend="${bankAccounts.last} ? 'disabled'">
-
-
-                        <!-- ✅ تغییر یافته -->
-                        <a class="page-link" th:href="@{/bankAccount(page=${bankAccounts.number + 1}, size=${bankAccounts.size})}">Next</a>
+                        <a class="page-link"
+                           th:href="${isTrash} ? @{/bankAccount/trash(page=${bankAccounts.number + 1}, size=${bankAccounts.size})} : @{/bankAccount(page=${bankAccounts.number + 1}, size=${bankAccounts.size})}">Next</a>
                     </li>
                 </ul>
             </nav>
@@ -172,7 +168,6 @@
             </div>
 
             <div class="modal-body">
-                <!-- ✅ تغییر یافته -->
                 <form id="accountForm" method="post" th:object="${bankAccount}"
                       th:action="${formAction != null ? formAction : '/bankAccount'}">
 
