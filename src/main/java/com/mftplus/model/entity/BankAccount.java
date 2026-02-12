@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 
 
 @Entity(name="BankAccountEntity")
-@Table(name="bank_aacount")
+@Table(name="bank_account")
 @SQLDelete(sql = "UPDATE bank_account SET deleted = true WHERE id = ?")
 @SQLRestriction("deleted = false")
 @NoArgsConstructor

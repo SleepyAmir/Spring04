@@ -14,20 +14,12 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, Long> 
 
 
 
-    @Query(
-            value = "SELECT * FROM bank_account WHERE deleted = true ",
-            countQuery = "SELECT count(*) FROM bank_account WHERE deleted = true ",
-            nativeQuery = true
-    )
+    @Query("SELECT b FROM BankAccountEntity b WHERE b.deleted= true ")
     Page<BankAccount> findAllDeleted(Pageable pageable);
 
 
 
-    @Query(
-            value = "SELECT * FROM bank_account",
-            countQuery = "SELECT count(*) FROM bank_account",
-            nativeQuery = true
-    )
+    @Query("SELECT b FROM BankAccountEntity b")
     Page<BankAccount> findAllEvenDeleted(Pageable pageable);
 
 
