@@ -13,6 +13,22 @@ document.addEventListener('DOMContentLoaded', function () {
     const familyInput = document.getElementById('family');
     const typeSelect = document.getElementById('type');
 
+    // ✅ رفع مشکل shift هنگام باز شدن modal
+    accountModalEl.addEventListener('show.bs.modal', function () {
+        // ذخیره عرض فعلی scrollbar
+        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+        // جلوگیری از shift با تنظیم padding
+        if (scrollbarWidth > 0) {
+            document.body.style.paddingRight = '0px';
+        }
+    });
+
+    accountModalEl.addEventListener('hidden.bs.modal', function () {
+        // بازگرداندن حالت اولیه
+        document.body.style.paddingRight = '';
+    });
+
     // Show modal if there are validation errors
     if (showModalOnError) {
         accountModal.show();
@@ -54,7 +70,7 @@ document.addEventListener('DOMContentLoaded', function () {
         openEditModal(id, name, family, type);
     }
 
-    // Open Edit Modal Function (تغییری نکرده)
+    // Open Edit Modal Function
     window.openEditModal = function (id, name, family, type) {
         modalTitle.innerText = "Edit Bank Account";
         accountForm.action = "/bankAccount/" + id;

@@ -1,5 +1,15 @@
 /* Bank Account Management Custom Styles */
 
+/* ✅ رفع مشکل جابه‌جایی Modal */
+body {
+    overflow-y: scroll !important; /* همیشه scrollbar نمایش داده شود */
+}
+
+/* جلوگیری از padding اضافی هنگام باز شدن modal */
+body.modal-open {
+    padding-right: 0 !important;
+}
+
 /* Main Card Styling */
 .main-card {
     border-radius: 15px;
@@ -134,7 +144,7 @@
     box-shadow: 0 4px 8px rgba(25, 135, 84, 0.3);
 }
 
-/* Modal Styling */
+/* Modal Styling - ✅ اصلاح شده */
 .modal-content {
     border-radius: 15px;
     border: none;
@@ -150,6 +160,15 @@
 
 .modal-header .btn-close {
     filter: brightness(0) invert(1);
+}
+
+/* ✅ جلوگیری از shift کردن modal */
+.modal {
+    padding-right: 0 !important;
+}
+
+.modal-backdrop {
+    /* بدون تغییر */
 }
 
 /* Form Input Styling */
@@ -215,21 +234,21 @@
         flex-direction: column;
         gap: 15px;
     }
-    
+
     .main-card .card-header h5 {
         font-size: 1.1rem;
     }
-    
+
     .table {
         font-size: 0.875rem;
     }
-    
+
     .account-number {
         font-size: 0.75rem;
         letter-spacing: 1px;
         padding: 4px 8px;
     }
-    
+
     .balance-amount {
         font-size: 0.95rem;
     }
