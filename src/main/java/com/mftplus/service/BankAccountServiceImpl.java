@@ -26,13 +26,9 @@ public class BankAccountServiceImpl implements BankAccountService {
     private static final String Account_BIN = "6037";
     private static final BigDecimal Default_Balance = new BigDecimal("1000.00");
 
-
-
-
     @Transactional
     @Override
     public void save(BankAccountDto bankAccountDto) {
-
         bankAccountDto.setAccountNumber(generateAccountNumber());
         bankAccountDto.setBalance(Default_Balance);
 
@@ -43,24 +39,23 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Transactional
     @Override
     public void update(BankAccountDto bankAccountDto) {
-        if (bankAccountDto.getId() == null){
+        if (bankAccountDto.getId() == null) {
             throw new IllegalArgumentException("ID cannot be null for update");
         }
-        BankAccount existingAccount = bankAccountRepository.findById(bankAccountDto.getId()).orElseThrow(()->new IllegalArgumentException("Account not found"));
+
+        BankAccount existingAccount = bankAccountRepository.findById(bankAccountDto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("Account not found"));
+
         existingAccount.setName(bankAccountDto.getName());
         existingAccount.setFamily(bankAccountDto.getFamily());
         existingAccount.setType(bankAccountDto.getType());
-
-        BankAccount bankAccount = bankAccountMapper.toEntity(bankAccountDto);
-        bankAccountRepository.save(bankAccount);
-
+        bankAccountRepository.save(existingAccount);
     }
 
     @Transactional
     @Override
     public void deleteById(Long id) {
         bankAccountRepository.deleteById(id);
-
     }
 
     @Override
@@ -82,7 +77,6 @@ public class BankAccountServiceImpl implements BankAccountService {
     public Page<BankAccountDto> findAll(Pageable pageable) {
         return bankAccountRepository.findAll(pageable)
                 .map(bankAccountMapper::toDto);
-
     }
 
     @Transactional
@@ -98,15 +92,15 @@ public class BankAccountServiceImpl implements BankAccountService {
                 .map(bankAccountMapper::toDto);
     }
 
+    @Transactional
     @Override
     public void restoreById(Long id) {
         bankAccountRepository.restoreById(id);
-
     }
 
     @Override
     public Page<BankAccountDto> findByNameAndFamily(String name, String family, Pageable pageable) {
-        return bankAccountRepository.findByNameAndFamily(name,family,pageable)
+        return bankAccountRepository.findByNameAndFamily(name, family, pageable)
                 .map(bankAccountMapper::toDto);
     }
 
@@ -124,31 +118,22 @@ public class BankAccountServiceImpl implements BankAccountService {
 
     @Override
     public BankAccountDto issueAccount(Long id, AccountType accountType, BankAccountDto bankAccountDto) {
-
-
         return null;
     }
 
-
     private String generateAccountNumber() {
-        StringBuilder sb = new StringBuilder(Account_BIN); // 6037
-
+        StringBuilder sb = new StringBuilder(Account_BIN);
         for (int i = 0; i < 12; i++) {
             sb.append(random.nextInt(10));
         }
-
         return sb.toString();
     }
 
-
     private String generatedUniqueAccountNumber() {
-        String accountNumber ;
-        do{
+        String accountNumber;
+        do {
             accountNumber = generateAccountNumber();
-        }while (bankAccountRepository.findByAccountNumber(accountNumber,null).hasContent());
-
+        } while (bankAccountRepository.findByAccountNumber(accountNumber, null).hasContent());
         return accountNumber;
-
     }
-
 }

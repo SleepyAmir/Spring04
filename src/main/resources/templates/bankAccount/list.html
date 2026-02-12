@@ -47,10 +47,12 @@
                 </span>
             </h5>
             <div class="btn-group" role="group">
-                <a th:href="@{/bank/trash}" class="btn btn-outline-secondary btn-sm" th:unless="${isTrash}">
+                <!-- ✅ تغییر یافته -->
+                <a th:href="@{/bankAccount/trash}" class="btn btn-outline-secondary btn-sm" th:unless="${isTrash}">
                     <i class="bi bi-trash"></i> Trash
                 </a>
-                <a th:href="@{/bank}" class="btn btn-outline-secondary btn-sm" th:if="${isTrash}">
+                <!-- ✅ تغییر یافته -->
+                <a th:href="@{/bankAccount}" class="btn btn-outline-secondary btn-sm" th:if="${isTrash}">
                     <i class="bi bi-arrow-left"></i> Back
                 </a>
                 <button type="button" class="btn btn-primary btn-sm" onclick="openAddModal()" th:unless="${isTrash}">
@@ -79,6 +81,7 @@
                             <i class="bi bi-inbox fs-1 d-block mb-2 text-secondary"></i>
                             <span th:text="${isTrash} ? 'No deleted accounts' : 'No data available'"></span>
                         </td>
+
                     </tr>
                     <tr th:each="account : ${bankAccounts.content}">
                         <td class="ps-4">
@@ -105,7 +108,11 @@
                         <td class="text-end pe-4">
                             <div th:unless="${isTrash}">
                                 <button class="btn btn-sm btn-outline-warning me-1"
-                                        th:onclick="|openEditModal(${account.id}, '${account.name}', '${account.family}', '${account.type}')|">
+                                        th:data-id="${account.id}"
+                                        th:data-name="${account.name}"
+                                        th:data-family="${account.family}"
+                                        th:data-type="${account.type}"
+                                        onclick="openEditModalFromData(this)">
                                     <i class="bi bi-pencil"></i>
                                 </button>
                                 <button class="btn btn-sm btn-outline-danger"
@@ -116,7 +123,7 @@
                                 </button>
                             </div>
                             <div th:if="${isTrash}">
-                                <form th:action="@{/bank/restore/{id}(id=${account.id})}" method="post" class="d-inline">
+                                <form th:action="@{/bankAccount/restore/{id}(id=${account.id})}" method="post" class="d-inline">
                                     <button type="submit" class="btn btn-sm btn-outline-success">
                                         <i class="bi bi-arrow-clockwise"></i> Restore
                                     </button>
@@ -134,15 +141,20 @@
             <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-center mb-0">
                     <li class="page-item" th:classappend="${bankAccounts.first} ? 'disabled'">
-                        <a class="page-link" th:href="@{/bank(page=${bankAccounts.number - 1}, size=${bankAccounts.size})}">Previous</a>
+                        <!-- ✅ تغییر یافته -->
+                        <a class="page-link" th:href="@{/bankAccount(page=${bankAccounts.number - 1}, size=${bankAccounts.size})}">Previous</a>
                     </li>
                     <li class="page-item" th:each="i : ${#numbers.sequence(0, bankAccounts.totalPages - 1)}"
                         th:classappend="${i == bankAccounts.number} ? 'active'">
-                        <a class="page-link" th:href="@{/bank(page=${i}, size=${bankAccounts.size})}"
+                        <!-- ✅ تغییر یافته -->
+                        <a class="page-link" th:href="@{/bankAccount(page=${i}, size=${bankAccounts.size})}"
                            th:text="${i + 1}">1</a>
                     </li>
                     <li class="page-item" th:classappend="${bankAccounts.last} ? 'disabled'">
-                        <a class="page-link" th:href="@{/bank(page=${bankAccounts.number + 1}, size=${bankAccounts.size})}">Next</a>
+
+
+                        <!-- ✅ تغییر یافته -->
+                        <a class="page-link" th:href="@{/bankAccount(page=${bankAccounts.number + 1}, size=${bankAccounts.size})}">Next</a>
                     </li>
                 </ul>
             </nav>
@@ -160,8 +172,9 @@
             </div>
 
             <div class="modal-body">
+                <!-- ✅ تغییر یافته -->
                 <form id="accountForm" method="post" th:object="${bankAccount}"
-                      th:action="${formAction != null ? formAction : '/bank'}">
+                      th:action="${formAction != null ? formAction : '/bankAccount'}">
 
                     <input type="hidden" name="_method" id="methodField"
                            th:value="${bankAccount.id != null ? 'put' : ''}"
@@ -214,6 +227,7 @@
 
                     <div class="text-end">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+
                         <button type="submit" class="btn btn-primary">
                             <i class="bi bi-save me-1"></i>Save Changes
                         </button>

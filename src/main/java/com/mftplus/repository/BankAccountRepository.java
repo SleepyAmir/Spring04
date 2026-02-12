@@ -15,8 +15,8 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, Long> 
 
 
     @Query(
-            value = "SELECT * FROM bankAccount WHERE deleted = true ",
-            countQuery = "SELECT count(*) FROM bankAccount WHERE deleted = true ",
+            value = "SELECT * FROM bank_account WHERE deleted = true ",
+            countQuery = "SELECT count(*) FROM bank_account WHERE deleted = true ",
             nativeQuery = true
     )
     Page<BankAccount> findAllDeleted(Pageable pageable);
@@ -24,8 +24,8 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, Long> 
 
 
     @Query(
-            value = "SELECT * FROM bankAccont",
-            countQuery = "SELECT count(*) FROM bankAccount",
+            value = "SELECT * FROM bank_account",
+            countQuery = "SELECT count(*) FROM bank_account",
             nativeQuery = true
     )
     Page<BankAccount> findAllEvenDeleted(Pageable pageable);
@@ -33,7 +33,7 @@ public interface BankAccountRepository extends JpaRepository<BankAccount, Long> 
 
     @Transactional
     @Modifying
-    @Query(value = "UPDATE bankAccount SET deleted = false WHERE id = :id "
+    @Query(value = "UPDATE bank_account SET deleted = false WHERE id = :id "
     , nativeQuery = true)
     void restoreById(@Param("id") Long id);
 

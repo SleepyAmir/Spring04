@@ -6,7 +6,7 @@ import com.mftplus.model.entity.BankAccount;
 import org.mapstruct.Mapper;
 
 
-@Mapper(componentModel="Spring")
+@Mapper(componentModel="spring")
 public interface BankAccountMapper {
     BankAccountDto toDto(BankAccount bankAccount);
 

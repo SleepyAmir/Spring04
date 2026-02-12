@@ -12,8 +12,8 @@ import java.math.BigDecimal;
 
 
 @Entity(name="BankAccountEntity")
-@Table(name="bankAccount")
-@SQLDelete(sql = "UPDATE bankAccount SET deleted = true WHERE id = ?")
+@Table(name="bank_aacount")
+@SQLDelete(sql = "UPDATE bank_account SET deleted = true WHERE id = ?")
 @SQLRestriction("deleted = false")
 @NoArgsConstructor
 @AllArgsConstructor
@@ -40,6 +40,7 @@ public class BankAccount extends BaseEntity {
     private BigDecimal balance;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private AccountType type;
 
     @Column(name = "deleted", nullable = false)

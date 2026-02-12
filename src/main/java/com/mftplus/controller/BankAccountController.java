@@ -2,7 +2,6 @@ package com.mftplus.controller;
 
 import com.mftplus.dto.BankAccountDto;
 import com.mftplus.exception.ResourceNotFoundException;
-import com.mftplus.model.enums.AccountType;
 import com.mftplus.service.BankAccountService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,16 +15,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.math.BigDecimal;
-
 @Controller
-@RequestMapping("/bankAccount")
+@RequestMapping("/bankAccount")  // ✅ مسیر اصلی
 @RequiredArgsConstructor
 public class BankAccountController {
 
     private final BankAccountService bankAccountService;
 
-    // Helper method to prepare list model - با حذف پارامترهای غیرضروری
+    // Helper method to prepare list model
     private void prepareListModel(Model model, int page, int size, String name, String accountNumber) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("balance").descending());
         Page<BankAccountDto> bankAccountPage;
@@ -39,7 +36,7 @@ public class BankAccountController {
         model.addAttribute("bankAccounts", bankAccountPage);
     }
 
-    // --- GET LIST ---
+    // --- GET LIST --- ✅ این متد اضافه شده
     @GetMapping
     public String getAllBankAccounts(
             @RequestParam(defaultValue = "0") int page,
@@ -59,7 +56,7 @@ public class BankAccountController {
     }
 
     // --- GET TRASH ---
-    @GetMapping("/trash")  // تغییر از PostMapping به GetMapping
+    @GetMapping("/trash")
     public String getTrash(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -71,6 +68,7 @@ public class BankAccountController {
         model.addAttribute("bankAccounts", deletedPage);
         model.addAttribute("isTrash", true);
 
+        // اضافه کردن DTO خالی
         if (!model.containsAttribute("bankAccount")) {
             model.addAttribute("bankAccount", new BankAccountDto());
         }

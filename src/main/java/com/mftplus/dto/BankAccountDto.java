@@ -11,7 +11,6 @@ import org.mapstruct.Mapper;
 import java.math.BigDecimal;
 
 @Data
-@Mapper(componentModel = "spring")
 public class BankAccountDto {
 
     private Long id;
@@ -24,8 +23,7 @@ public class BankAccountDto {
 
     private String accountNumber;
 
-    @NotBlank
-    @Positive
+
     private BigDecimal balance;
 
 

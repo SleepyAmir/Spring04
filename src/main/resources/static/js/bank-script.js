@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // Open Add Modal Function
     window.openAddModal = function () {
         modalTitle.innerText = "Add New Bank Account";
-        accountForm.action = "/bank";
+        accountForm.action = "/bankAccount";
         accountForm.reset();
 
         // Remove validation error classes
@@ -44,10 +44,20 @@ document.addEventListener('DOMContentLoaded', function () {
         accountModal.show();
     }
 
-    // Open Edit Modal Function
+    // ✅ تابع جدید برای Edit که از data attributes استفاده می‌کند
+    window.openEditModalFromData = function (button) {
+        const id = button.getAttribute('data-id');
+        const name = button.getAttribute('data-name');
+        const family = button.getAttribute('data-family');
+        const type = button.getAttribute('data-type');
+
+        openEditModal(id, name, family, type);
+    }
+
+    // Open Edit Modal Function (تغییری نکرده)
     window.openEditModal = function (id, name, family, type) {
         modalTitle.innerText = "Edit Bank Account";
-        accountForm.action = "/bank/" + id;
+        accountForm.action = "/bankAccount/" + id;
 
         nameInput.value = name;
         familyInput.value = family;
@@ -75,6 +85,6 @@ document.addEventListener('DOMContentLoaded', function () {
     deleteModal.addEventListener('show.bs.modal', function (event) {
         const button = event.relatedTarget;
         const id = button.getAttribute('data-id');
-        deleteForm.action = `/bank/${id}`;
+        deleteForm.action = `/bankAccount/${id}`;
     });
 });
