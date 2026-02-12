@@ -22,7 +22,6 @@ public class BankAccountController {
 
     private final BankAccountService bankAccountService;
 
-    // Helper method to prepare list model
     private void prepareListModel(Model model, int page, int size, String name, String accountNumber) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("balance").descending());
         Page<BankAccountDto> bankAccountPage;
@@ -46,7 +45,6 @@ public class BankAccountController {
 
         prepareListModel(model, page, size, name, accountNumber);
 
-        // ساخت یک DTO خالی برای فرم
         if (!model.containsAttribute("bankAccount")) {
             model.addAttribute("bankAccount", new BankAccountDto());
         }
@@ -67,7 +65,6 @@ public class BankAccountController {
         model.addAttribute("bankAccounts", deletedPage);
         model.addAttribute("isTrash", true);
 
-        // اضافه کردن DTO خالی
         if (!model.containsAttribute("bankAccount")) {
             model.addAttribute("bankAccount", new BankAccountDto());
         }
