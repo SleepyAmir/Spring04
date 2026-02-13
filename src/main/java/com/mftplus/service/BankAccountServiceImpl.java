@@ -29,7 +29,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Transactional
     @Override
     public void save(BankAccountDto bankAccountDto) {
-        bankAccountDto.setAccountNumber(generateAccountNumber());
+        bankAccountDto.setAccountNumber(generateUniqueAccountNumber());
         bankAccountDto.setBalance(Default_Balance);
 
         BankAccount bankAccount = bankAccountMapper.toEntity(bankAccountDto);
