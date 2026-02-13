@@ -129,10 +129,10 @@ public class BankAccountServiceImpl implements BankAccountService {
         return sb.toString();
     }
 
-    private String generatedUniqueAccountNumber() {
+    private String generateUniqueAccountNumber {
         String accountNumber;
         do {
-            accountNumber = generateAccountNumber();
+            accountNumber = generateUniqueAccountNumber;
         } while (bankAccountRepository.findByAccountNumber(accountNumber, null).hasContent());
         return accountNumber;
     }
