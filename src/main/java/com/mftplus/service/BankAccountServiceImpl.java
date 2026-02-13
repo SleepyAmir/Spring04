@@ -29,7 +29,7 @@ public class BankAccountServiceImpl implements BankAccountService {
     @Transactional
     @Override
     public void save(BankAccountDto bankAccountDto) {
-        bankAccountDto.setAccountNumber(generateUniqueAccountNumber());
+        bankAccountDto.setAccountNumber(generateAccountNumber());
         bankAccountDto.setBalance(Default_Balance);
 
         BankAccount bankAccount = bankAccountMapper.toEntity(bankAccountDto);
@@ -129,11 +129,4 @@ public class BankAccountServiceImpl implements BankAccountService {
         return sb.toString();
     }
 
-    private String generateUniqueAccountNumber {
-        String accountNumber;
-        do {
-            accountNumber = generateUniqueAccountNumber;
-        } while (bankAccountRepository.findByAccountNumber(accountNumber, null).hasContent());
-        return accountNumber;
-    }
 }
